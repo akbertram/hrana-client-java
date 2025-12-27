@@ -6,7 +6,8 @@ backends. You can use it in two ways:
 - Low-level: call the Hrana HTTP pipeline directly via `HranaHttpClient` and `HranaHttpStream`.
 - JDBC: use the minimal JDBC driver to work with `java.sql` (`Connection`, `Statement`, `PreparedStatement`, `ResultSet`).
 
-This project is still under development and not 
+This project is still under development and will probably require some additional work before the
+JDBC interface will work completely.
 
 ## Features
 - JDBC `Driver` for `jdbc:libsql://...` URLs
@@ -28,7 +29,7 @@ This project is still under development and not
   - Easier migration path for legacy applications
 
 ## Requirements
-- Java 11 or newer (uses `java.net.http.HttpClient`)
+- Java 17 or newer
 - A LibSQL/Turso-compatible endpoint that supports Hrana over HTTPS
 - A JWT token with appropriate permissions
 

@@ -32,10 +32,10 @@ public class HranaJdbcIT {
     baseUrl = System.getenv("HRANA_URL");
     jwt = System.getenv("HRANA_JWT");
 
-    assumeTrue(baseUrl != null && !baseUrl.isBlank(),
-      "HRANA_URL not set; skipping integration tests");
-    assumeTrue(jwt != null && !jwt.isBlank(),
-      "HRANA_JWT not set; skipping integration tests");
+    assertTrue(baseUrl != null && !baseUrl.isBlank(),
+      "HRANA_URL not set; integration test cannot run");
+    assertTrue(jwt != null && !jwt.isBlank(),
+      "HRANA_JWT not set; integration test cannot run");
 
     this.connection = DriverManager.getConnection("jdbc:" + baseUrl);
 
