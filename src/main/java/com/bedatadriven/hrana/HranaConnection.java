@@ -98,8 +98,7 @@ public class HranaConnection implements Connection {
       throw new SQLException("Cannot call commit() in auto-commit mode");
     }
     try {
-      stream.executeStatement("COMMIT");
-      stream.executeStatement("BEGIN");
+      stream.executeStatements("COMMIT", "BEGIN");
     } catch (IOException e) {
       throw new SQLException("I/O error during COMMIT", e);
     } catch (InterruptedException e) {
