@@ -253,7 +253,7 @@ public class HranaHttpStream implements AutoCloseable {
       .setExecute(ExecuteStreamReq.newBuilder().setStmt(stmt))
       .build();
 
-    StreamResult streamResult = request(streamReq).getFirst();
+    StreamResult streamResult = request(streamReq).get(0);
     if (streamResult.hasError()) {
       throw new IOException("Hrana error: " + streamResult.getError().getMessage());
     } else if (streamResult.hasOk()) {
@@ -353,7 +353,7 @@ public class HranaHttpStream implements AutoCloseable {
       .setGetAutocommit(getReq)
       .build();
 
-    StreamResult result = request(streamReq).getFirst();
+    StreamResult result = request(streamReq).get(0);
 
     if (result.hasError()) {
       // surface the server error as IOException to caller
