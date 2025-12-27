@@ -1,8 +1,12 @@
 
 plugins {
     id 'java-library'
+    id 'maven-publish'
     id "com.google.protobuf" version "0.9.6"
 }
+
+group = 'com.bedatadriven'
+version = '0.1'
 
 repositories {
     mavenCentral()
@@ -20,5 +24,57 @@ test {
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:4.28.2"
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.bedatadriven'
+            artifactId = 'hrana-client'
+            version '0.1'
+
+            from components.java
+
+            pom {
+                name = 'hrana-client'
+                description = 'Hrana client for Java'
+                url = 'https://github.com/akbertram/hrana-client-java'
+                inceptionYear = '2025'
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://spdx.org/licenses/MIT.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'akbertram'
+                        name = 'Alex Bertram'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/akbertram/hrana-client-java.git'
+                    developerConnection = 'scm:git:ssh://github.com/akbertram/hrana-client-java.git'
+                    url = 'https://github.com/akbertram/hrana-client-java'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
     }
 }
