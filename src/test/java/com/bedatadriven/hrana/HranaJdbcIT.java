@@ -115,6 +115,67 @@ public class HranaJdbcIT {
   }
 
   @Test
+  void resultSet_getByColumnLabel_with_aliases() throws Exception {
+    // Insert a couple rows
+    try (PreparedStatement ps = connection.prepareStatement(
+      "INSERT INTO " + tableName + " (id, name, note) VALUES (?, ?, ?)")) {
+      ps.setInt(1, 1);
+      ps.setString(2, "Alpha");
+      ps.setBytes(3, new byte[] {9,8,7});
+      ps.executeUpdate();
+    }
+    try (PreparedStatement ps = connection.prepareStatement(
+      "INSERT INTO " + tableName + " (id, name, note) VALUES (?, ?, ?)")) {
+      ps.setInt(1, 2);
+      ps.setString(2, "Beta");
+      ps.setBytes(3, new byte[] {6,5,4});
+      ps.executeUpdate();
+    }
+
+    // Select with explicit aliases and fetch by column label using getXXX(label)
+    String sql = "SELECT id AS user_id, name AS user_name, note AS user_note FROM " + tableName + " ORDER BY id";
+    try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+      assertTrue(rs.next());
+      assertEquals(1L, rs.getLong("user_id"));
+      assertEquals(1, rs.getInt("user_id"));
+      assertEquals("Alpha", rs.getString("user_name"));
+      assertArrayEquals(new byte[] {9,8,7}, rs.getBytes("user_note"));
+
+      assertTrue(rs.next());
+      assertEquals(2L, rs.getLong("user_id"));
+      assertEquals(2, rs.getInt("user_id"));
+      assertEquals("Beta", rs.getString("user_name"));
+      assertArrayEquals(new byte[] {6,5,4}, rs.getBytes("user_note"));
+
+      assertFalse(rs.next());
+    }
+  }
+
+  @Test
+  void resultSet_getByColumnLabel_without_aliases() throws Exception {
+    // Insert single row
+    try (PreparedStatement ps = connection.prepareStatement(
+      "INSERT INTO " + tableName + " (id, name, note) VALUES (?, ?, ?)")) {
+      ps.setLong(1, 42L);
+      ps.setString(2, "Douglas");
+      ps.setBytes(3, new byte[] {1, 1, 2, 3, 5, 8});
+      ps.executeUpdate();
+    }
+
+    // Select using natural column names and exercise label-based getters
+    String sql = "SELECT id, name, note FROM " + tableName + " WHERE id = 42";
+    try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+      assertTrue(rs.next());
+      // getXXX by label should resolve natural names
+      assertEquals(42L, rs.getLong("id"));
+      assertEquals(42, rs.getInt("id"));
+      assertEquals("Douglas", rs.getString("name"));
+      assertArrayEquals(new byte[] {1, 1, 2, 3, 5, 8}, rs.getBytes("note"));
+      assertFalse(rs.next());
+    }
+  }
+
+  @Test
   void transaction_rollback_discards_changes() throws Exception {
     connection.setAutoCommit(false);
     try (PreparedStatement ps = connection.prepareStatement(

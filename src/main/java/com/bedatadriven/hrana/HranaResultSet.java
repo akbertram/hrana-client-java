@@ -221,7 +221,7 @@ class HranaResultSet implements ResultSet {
 
   @Override
   public String getString(String columnLabel) throws SQLException {
-    throw new UnsupportedOperationException("TODO");
+    return getString(findColumn(columnLabel));
   }
 
   @Override
