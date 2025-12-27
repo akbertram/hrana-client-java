@@ -1,0 +1,18 @@
+
+plugins {
+    id 'java-library'
+    id "com.google.protobuf" version "0.9.6"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.google.protobuf:protobuf-java:4.28.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+}
+
+test {
+    useJUnitPlatform()
+}
