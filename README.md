@@ -1,5 +1,7 @@
 # hrana-client-java
 
+![Maven Central Version](https://img.shields.io/maven-central/v/com.bedatadriven/hrana-client)
+
 A lightweight Java client that speaks the Hrana protocol over HTTP to LibSQL/Turso-compatible 
 backends. You can use it in two ways:
 
@@ -8,6 +10,19 @@ backends. You can use it in two ways:
 
 This project is still under development and will probably require some additional work before the
 JDBC interface will work completely.
+
+## Installation
+
+Add the following maven dependency:
+
+```.xml
+<dependency>
+    <groupId>com.bedatadriven</groupId>
+    <artifactId>hrana-client</artifactId>
+    <version>0.1</version>
+</dependency>
+```
+
 
 ## Features
 - JDBC `Driver` for `jdbc:libsql://...` URLs
