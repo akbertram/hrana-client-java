@@ -3,6 +3,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "com.google.protobuf" version "0.9.6"
+    id 'org.jreleaser' version '1.21.0'
 }
 
 group = 'com.bedatadriven'
@@ -69,11 +70,24 @@ publishing {
     }
     repositories {
         maven {
-            name = "OSSRH"
-            url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'RELEASE'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
             }
         }
     }
