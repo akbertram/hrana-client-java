@@ -29,10 +29,10 @@ jobs:
           gradle-version: wrapper
 
       - name: Build
-        run: ./gradlew --no-daemon --stacktrace build
-
-      - name: Run tests
-        run: ./gradlew --no-daemon --stacktrace test
+        env:
+          HRANA_URL: ${{ secrets.HRANA_URL }}
+          HRANA_JWT: ${{ secrets.HRANA_JWT }}
+        run: ./gradlew --no-daemon --stacktrace build check
 
       - name: Publish test reports (JUnit)
         if: always()
